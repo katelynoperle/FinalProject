@@ -1,0 +1,23 @@
+body {
+  background-color: lightgray;
+}
+
+h1 {
+    font-size: 55px;
+}
+
+.wrapper {
+   display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+h2 {
+  font-size: 25;
+    color: white
+}
+
+h3 {
+    font-size: 25;
+}
+
