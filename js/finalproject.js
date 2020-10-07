@@ -26,7 +26,7 @@ var initGraph1= function (petownership)
                 .attr("transform", "translate (" + margins.left + ", "+ margins.top +")");
     
     var xScale= d3.scaleBand()
-        .domain(["Vermont","New Mexico","South Dakota","Oregon","Maine","Washington","Arkansas","West Virginia","Idaho","Wyoming"])
+        .domain(["Kentucky","New Mexico","South Dakota","Oregon","Maine","Washington","Arkansas","West Virginia","Idaho","Wyoming"])
         .range([0, graph.width])
         .paddingInner(.25)
     
