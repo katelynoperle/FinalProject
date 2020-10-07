@@ -332,7 +332,7 @@ var initGraph3= function (mostincidents)
                 .attr("transform", "translate (" + margins.left + ", "+ margins.top +")");
     
     var xScale= d3.scaleBand()
-        .domain(["Kentucky","Vermont","New Mexico","Deleware","Colorado"])
+        .domain(["Kentucky","Vermont","Illinois","West Virginia","Colorado"])
         .range([0, graph.width])
         .paddingInner(.25)
     
@@ -423,7 +423,7 @@ var drawLabels3 = function(graph,margins)
         .classed("labels",true)
         
     labels.append("text")
-        .text("States with the most Animal Cruelty Incidents Per Year")
+        .text(" Animal Cruelty Incidents Per Year")
         .classed("title",true)
         .attr("text-anchor","middle")
         .attr("x",margins.left+(graph.width/2))
@@ -456,10 +456,10 @@ mostincidentsPromise.then(succFCN3,failFCN3);
 
 
 
-//graph 4 starts here
+//graph 5 starts here
 
 
-var initGraph4= function (incident)
+var initGraph5= function (incident)
 {
     var screen= {width: 700, height: 400}
     
@@ -473,12 +473,12 @@ var initGraph4= function (incident)
     
     console.log(graph)
     
-    d3.select("#graph4")
+    d3.select("#graph5")
         .attr("width", screen.width)
         .attr("height",screen.height)
             
   
-    var target = d3.select("#graph4")
+    var target = d3.select("#graph5")
                 .append ("g")
                 .attr("transform", "translate (" + margins.left + ", "+ margins.top +")");
     
@@ -492,15 +492,15 @@ var initGraph4= function (incident)
         .range([graph.height,0])
     
     
-    drawAxis4(graph,margins,xScale,yScale);
+    drawAxis5(graph,margins,xScale,yScale);
     var g0 = target.append("g");
-    drawBars4(incident,g0,graph,xScale,yScale);
-    drawLabels4(graph,margins,target);
+    drawBars5(incident,g0,graph,xScale,yScale);
+    drawLabels5(graph,margins,target);
 
 }
 
 
-var drawBars4= function(incident,target,graphDim,xScale,yScale)
+var drawBars5= function(incident,target,graphDim,xScale,yScale)
 {
     target.selectAll("rect")
         .data(incident)
@@ -521,38 +521,26 @@ var drawBars4= function(incident,target,graphDim,xScale,yScale)
 { 
                return graphDim.height-yScale(state.incident_number)
 })
-        .attr("fill", "black") .on("mouseenter", function(incident)
-{
-                var xPos= d3.event.pageX;
-                var yPos= d3.event.pageY;
-            
-        d3.select("#tooltip")
-            .classed("hidden", false)
-            .style("top",yPos+"px")
-            .style("left",xPos+"px")
-            .text(incident.incident_number) 
-})
+       
 }
-   /*  .selectAll(".bar")
-      .data(data)
-    .enter().append("rect")
-      .attr("class", "bar")
-      .attr("x", function(d) { return x(d.letter); })
-      .attr("width", x.rangeBand())
-      .attr("y", function(d) { return y(d.frequency); })
-      .attr("height", function(d) { return height - y(d.frequency); })
-      .on('mouseover', tip.show)
-      .on('mouseout', tip.hide)
-      */
+     .on("mouseenter",function(state)                      
+    {
+    var xPos = d3.event.pageX;
+    var yPos = d3.event.pageY;
+    
+    d3.select("#tooltip")
+    .classed("hidden",false)
+    .style("top",yPos+"px")
+    .style("left",xPos+"px")
+}) 
 
-        
-
-var drawAxis4 = function(graph,margins,xScale,yScale)
+    
+var drawAxis5 = function(graph,margins,xScale,yScale)
 {
    var xAxis= d3.axisBottom(xScale);
    var yAxis= d3.axisLeft(yScale);
     
-    var axes= d3.select("#graph4")
+    var axes= d3.select("#graph5")
         .append("g")
         
     axes.append("g")
@@ -567,14 +555,14 @@ var drawAxis4 = function(graph,margins,xScale,yScale)
 
 }
 
-var drawLabels4 = function(graph,margins)
+var drawLabels5 = function(graph,margins)
 {
-        var labels = d3.select("#graph4")
+        var labels = d3.select("#graph5")
         .append("g")
         .classed("labels",true)
         
     labels.append("text")
-        .text("States with the fewest Animal Cruelty Incidents Per Year")
+        .text("States with the fewest Animal cruelty Incidents Per Year")
         .classed("title",true)
         .attr("text-anchor","middle")
         .attr("x",margins.left+(graph.width/2))
@@ -590,17 +578,19 @@ var drawLabels4 = function(graph,margins)
         .attr("transform","rotate(270)")
 }
 
-var succFCN4 = function(incident)
+var succFCN5 = function(incident)
 {
-    initGraph4(incident);
+    initGraph5(incident);
 }
 
 
-var failFCN4 = function(error)
+var failFCN5 = function(error)
 {
     console.log("error",error)
 }
 
 var incidentPromise= d3.csv("../csv/incident.csv")
 
-incidentPromise.then(succFCN4,failFCN4);
+incidentPromise.then(succFCN5,failFCN5);
+
+
