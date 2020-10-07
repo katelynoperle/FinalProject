@@ -1,13 +1,1 @@
-
-#wrapper {
-    overflow: auto
-}
-
-
-#column1 {
-   float:left
-}
-
-#column2 {
-    float:right
-}
+#div2 { width: 30px}

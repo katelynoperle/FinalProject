@@ -2,16 +2,11 @@
 
 // graph 1 starts here
 
-
-var overdosePromise= d3.csv("petownershipData.csv")
-
-
-
-var initGraph= function (ownershipPercent)
+var initGraph1= function (petownership)
 {
-    var screen= {width: 800, height: 250}
+    var screen= {width: 700, height: 400}
     
-    var margins= {left:80, right:5, top:20, bottom: 20}
+    var margins= {left:70, right:5, top:20, bottom: 20}
     
     var graph= 
         {
@@ -25,7 +20,7 @@ var initGraph= function (ownershipPercent)
         .attr("width", screen.width)
         .attr("height",screen.height)
             
-    
+  
     var target = d3.select("#graph1")
                 .append ("g")
                 .attr("transform", "translate (" + margins.left + ", "+ margins.top +")");
@@ -33,29 +28,25 @@ var initGraph= function (ownershipPercent)
     var xScale= d3.scaleBand()
         .domain(["Vermont","New Mexico","South Dakota","Oregon","Maine","Washington","Arkansas","West Virginia","Idaho","Wyoming"])
         .range([0, graph.width])
-        .paddingInner(.05)
+        .paddingInner(.25)
     
     var yScale= d3.scaleLinear()
-        .domain([0,100])
+        .domain([0,80])
         .range([graph.height,0])
     
-
-    drawAxis(graph,margins,xScale,yScale);
     
+    drawAxis1(graph,margins,xScale,yScale);
     var g0 = target.append("g");
-    drawBars(ownershipPercent,g0,graph,xScale,yScale);
-    var g1 = target.append("g");
-    drawBars(ownershipPercent,g1,graph,xScale,yScale);
-    
-    drawLabels(graph,margins,target);
+    drawBars1(petownership,g0,graph,xScale,yScale);
+    drawLabels1(graph,margins,target);
 
 }
 
 
-var drawBars= function(ownershipPercent,target,graphDim,xScale,yScale)
+var drawBars1= function(petownership,target,graphDim,xScale,yScale)
 {
     target.selectAll("rect")
-        .data(ownershipPercent)
+        .data(petownership)
         .enter()
         .append("rect")
         .attr("x", function (state)
@@ -69,11 +60,11 @@ var drawBars= function(ownershipPercent,target,graphDim,xScale,yScale)
 })
     
         .attr("width",xScale.bandwidth)
-        .attr("height", function(year)
+        .attr("height", function(state)
 { 
-               return graphDim.height-yScale(year.petownership_percent)
+               return graphDim.height-yScale(state.petownership_percent)
 })
-        .attr("fill", "black") .on("mouseenter", function(ownershipPercent)
+        .attr("fill", "black") .on("mouseenter", function(petownership)
 {
                 var xPos= d3.event.pageX;
                 var yPos=
@@ -83,12 +74,26 @@ var drawBars= function(ownershipPercent,target,graphDim,xScale,yScale)
             .classed("hidden", false)
             .style("top",yPos+"px")
             .style("left",xPos+"px")
-            .text(ownershipPercent.petownership_percent)
+            .text(petownership.petownership_percent) 
 })
 }
+
+
+ /*  .selectAll(".bar")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.letter); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.frequency); })
+      .attr("height", function(d) { return height - y(d.frequency); })
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide)
+      */
+
         
 
-var drawAxis = function(graph,margins,xScale,yScale)
+var drawAxis1 = function(graph,margins,xScale,yScale)
 {
    var xAxis= d3.axisBottom(xScale);
    var yAxis= d3.axisLeft(yScale);
@@ -108,7 +113,7 @@ var drawAxis = function(graph,margins,xScale,yScale)
 
 }
 
-var drawLabels = function(graph,margins)
+var drawLabels1 = function(graph,margins)
 {
         var labels = d3.select("#graph1")
         .append("g")
@@ -131,17 +136,20 @@ var drawLabels = function(graph,margins)
         .attr("transform","rotate(270)")
 }
 
+var succFCN1 = function(petownership)
+{
+    initGraph1(petownership);
+}
 
 
+var failFCN1 = function(error)
+{
+    console.log("error",error)
+}
 
+var petownershipPromise= d3.csv("../csv/petownershipData.csv")
 
-
-
-
-
-
-
-
+petownershipPromise.then(succFCN1,failFCN1);
 
 
 
@@ -150,57 +158,48 @@ var drawLabels = function(graph,margins)
 //graph 2 starts here
 
 
-var ownershipPromise= d3.csv("ownershipData.csv")
-
-
-
 var initGraph2= function (ownership)
 {
-    var screen= {width: 800, height: 250}
+    var screen= {width: 700, height: 400}
     
-    var margins= {right:80, left:5, top:20, bottom: 20}
+    var margins= {left:70, right:5, top:20, bottom: 20}
     
     var graph= 
-{
-            width:screen.width-margins. right-margins.left,
+        {
+            width:screen.width-margins. left-margins.right,
             height:screen.height/1.2 - margins.top-margins.bottom
-        
-}
+        }
     
     console.log(graph)
     
     d3.select("#graph2")
         .attr("width", screen.width)
         .attr("height",screen.height)
-            .
-    
+            
+  
     var target = d3.select("#graph2")
                 .append ("g")
-                .attr("transform", "translate (" + margins.right + ", "+ margins.top +")");
+                .attr("transform", "translate (" + margins.left + ", "+ margins.top +")");
     
     var xScale= d3.scaleBand()
         .domain(["Rhode Island","Minnesota","California","Maryland","Illinois","Nebraska","Utah","New Jersey","New York","Massachusetts"])
         .range([0, graph.width])
-        .paddingInner(.05)
+        .paddingInner(.25)
     
     var yScale= d3.scaleLinear()
-        .domain([0,100])
+        .domain([0,80])
         .range([graph.height,0])
     
-  
-
-    drawAxis(graph,margins,xScale,yScale);
     
+    drawAxis2(graph,margins,xScale,yScale);
     var g0 = target.append("g");
-    drawBars(ownership,g0,graph,xScale,yScale);
-    var g1 = target.append("g");
-    drawBars(ownership,g1,graph,xScale,yScale);
-    
-    drawLabels(graph,margins, target);
+    drawBars2(ownership,g0,graph,xScale,yScale);
+    drawLabels2(graph,margins,target);
 
 }
 
-var drawBars= function(ownership,target,graphDim,xScale,yScale)
+
+var drawBars2= function(ownership,target,graphDim,xScale,yScale)
 {
     target.selectAll("rect")
         .data(ownership)
@@ -219,23 +218,35 @@ var drawBars= function(ownership,target,graphDim,xScale,yScale)
         .attr("width",xScale.bandwidth)
         .attr("height", function(state)
 { 
-               return graphDim.height-yScale(year.ownership_percent)
+               return graphDim.height-yScale(state.ownership_percent)
 })
-        .attr("fill", "red") .on("mouseenter", function(ownership)
+        .attr("fill", "black") .on("mouseenter", function(ownership)
 {
                 var xPos= d3.event.pageX;
-                var yPos=
-                d3.event.pageY;
+                var yPos= d3.event.pageY;
             
         d3.select("#tooltip")
             .classed("hidden", false)
             .style("top",yPos+"px")
             .style("left",xPos+"px")
-            .text(ownership.ownership_percent)
+            .text(ownership.ownership_percent) 
 })
 }
+   /*  .selectAll(".bar")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.letter); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.frequency); })
+      .attr("height", function(d) { return height - y(d.frequency); })
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide)
+      */
 
-var drawAxis = function(graph,margins,xScale,yScale)
+        
+
+var drawAxis2 = function(graph,margins,xScale,yScale)
 {
    var xAxis= d3.axisBottom(xScale);
    var yAxis= d3.axisLeft(yScale);
@@ -245,6 +256,7 @@ var drawAxis = function(graph,margins,xScale,yScale)
         
     axes.append("g")
         .attr("transform", "translate("+margins.left+","+(margins.top+graph.height)+")") 
+        
         .call(xAxis)
         
  
@@ -253,7 +265,8 @@ var drawAxis = function(graph,margins,xScale,yScale)
        .call(yAxis)
 
 }
-var drawLabels = function(graph,margins)
+
+var drawLabels2 = function(graph,margins)
 {
         var labels = d3.select("#graph2")
         .append("g")
@@ -270,255 +283,324 @@ var drawLabels = function(graph,margins)
         .attr("transform","translate(20,"+ 
               (margins.top+(graph.height/2))+")")
         .append("text")
-        .text("# of households")
+        .text("% of households")
         .classed("label",true)
         .attr("text-anchor","middle")
         .attr("transform","rotate(270)")
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// graph 3 starts here
-
-var drawMap= function(mapData,target,pathGen,projection, border, field, label, color, strokeborder)
+var succFCN2 = function(ownership)
 {
-    
-      var color2= d3.scaleQuantize()
-    .range(['#ffb6c1', '#db6fbb', '#b300b3'])
-    .domain([.033, .268]);  
-   
+    initGraph2(ownership);
+}
 
-    target.selectAll("path")
-    .data(mapData.features)
-    .enter()
-    .append("path")
-    .attr("d",pathGen)
-    .style("fill", function(d)
-           {  
-        if(d.properties.data)
+
+var failFCN2 = function(error)
+{
+    console.log("error",error)
+}
+
+var ownershipPromise= d3.csv("../csv/ownershipData.csv")
+
+ownershipPromise.then(succFCN2,failFCN2);
+
+
+
+//graph 3 starts here
+
+var initGraph3= function (mostincidents)
+{
+    var screen= {width: 700, height: 400}
+    
+    var margins= {left:70, right:5, top:20, bottom: 20}
+    
+    var graph= 
         {
-             var value= d.properties.data[field];
-           return color(value); 
-        }
-        else
-        {
-            return "#ccc";
+            width:screen.width-margins. left-margins.right,
+            height:screen.height/1.2 - margins.top-margins.bottom
         }
     
-    }
-          )
-         .style("stroke-width", 3) 
-    .style("stroke", function(d)
-          {
-       if(d.properties.data)
-        {
+    console.log(graph)
+    
+    d3.select("#graph3")
+        .attr("width", screen.width)
+        .attr("height",screen.height)
             
-             var value= d.properties.data[border];
-           return strokeborder(value); 
-            
-        }
-        else
-        {
-            return "#ccc";
-        }
-    })
   
+    var target = d3.select("#graph3")
+                .append ("g")
+                .attr("transform", "translate (" + margins.left + ", "+ margins.top +")");
     
- .on("mouseenter" ,function(mapData)
-      {
+    var xScale= d3.scaleBand()
+        .domain(["Kentucky","Vermont","New Mexico","Deleware","Colorado"])
+        .range([0, graph.width])
+        .paddingInner(.25)
+    
+    var yScale= d3.scaleLinear()
+        .domain([0,1700])
+        .range([graph.height,0])
+    
+    
+    drawAxis3(graph,margins,xScale,yScale);
+    var g0 = target.append("g");
+    drawBars3(mostincidents,g0,graph,xScale,yScale);
+    drawLabels3(graph,margins,target);
+
+}
+
+
+var drawBars3= function(mostincidents,target,graphDim,xScale,yScale)
+{
+    target.selectAll("rect")
+        .data(mostincidents)
+        .enter()
+        .append("rect")
+        .attr("x", function (state)
+{
+                return xScale(state.state);
+})
+        .attr("y", function (state)
+{ 
         
-      var xPos = d3.event.pageX;
-      var yPos = d3.event.pageY;
-      
+                  return yScale (state.mostincidents_number);
+})
+    
+        .attr("width",xScale.bandwidth)
+        .attr("height", function(state)
+{ 
+               return graphDim.height-yScale(state.mostincidents_number)
+})
+        .attr("fill", "black") .on("mouseenter", function(mostincidents)
+{
+                var xPos= d3.event.pageX;
+                var yPos= d3.event.pageY;
+            
         d3.select("#tooltip")
-        .classed("hidden",false)
-        .style("top",yPos+"px")
-        .style("left",xPos+"px")
+            .classed("hidden", false)
+            .style("top",yPos+"px")
+            .style("left",xPos+"px")
+            .text(mostincidents.mostincidents_number) 
+})
+}
+   /*  .selectAll(".bar")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.letter); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.frequency); })
+      .attr("height", function(d) { return height - y(d.frequency); })
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide)
+      */
+
         
-       if (label!="")
-           {
-               d3.select("#mapData")
-        .text(mapData.properties.data[field]);
-           }
-           d3.select("#geoData")
-            .text(mapData.properties.data[border]);
+
+var drawAxis3 = function(graph,margins,xScale,yScale)
+{
+   var xAxis= d3.axisBottom(xScale);
+   var yAxis= d3.axisLeft(yScale);
+    
+    var axes= d3.select("#graph3")
+        .append("g")
         
-        d3.select("#mapDatalabel")
-        .text(label);
+    axes.append("g")
+        .attr("transform", "translate("+margins.left+","+(margins.top+graph.height)+")") 
         
-      })//tool tip off
-    .on("mouseleave",function()
-    {
-        d3.select("#tooltip")    
-        .classed("hidden",true);
-    })
+        .call(xAxis)
+        
+ 
+    axes.append("g")
+        .attr("transform", "translate("+margins.left+","+(margins.top)+")") 
+       .call(yAxis)
 
 }
 
-
-var makeTranslateString=function(x,y)
+var drawLabels3 = function(graph,margins)
 {
-    return "translate("+x+","+y+")";
-}
-
-var initGraph= function(stateData, mapData)
-{
-    var screen = {width:1000,height:550}
-    
-    var margins =
-        {left:30,right:20,top:20,bottom:30}
-
-
-    
-    
-    var createLabels = function(screen,margins,
-graph,target)
-{
-        var labels = d3.select(target)
+        var labels = d3.select("#graph3")
         .append("g")
         .classed("labels",true)
         
     labels.append("text")
-        .text("Map of the United States")
+        .text("States with the most Animal Cruelty Incidents Per Year")
         .classed("title",true)
         .attr("text-anchor","middle")
         .attr("x",margins.left+(graph.width/2))
         .attr("y",margins.top)
+     
+    labels.append("g")
+        .attr("transform","translate(20,"+ 
+              (margins.top+(graph.height/2))+")")
+        .append("text")
+        .text("# of Incidents")
+        .classed("label",true)
+        .attr("text-anchor","middle")
+        .attr("transform","rotate(270)")
 }
- 
- 
- 
-var joinData= function(mapData,stateData)
+
+var succFCN3 = function(mostincidents)
 {
-    var shapes= {};
-    mapData.features.forEach(function(feature)
-                            {
-        shapes[feature.properties.NAME]=feature;
-    })
-    stateData.forEach(function(state)
-                     { if(shapes[state.states])
-                         {
-        
-        shapes[state.states].properties.data=state;
-    }
-})
-    console.log(shapes)
+    initGraph3(mostincidents);
 }
-var graph = 
+
+
+var failFCN3 = function(error)
+{
+    console.log("error",error)
+}
+
+var mostincidentsPromise= d3.csv("../csv/mostincidents.csv")
+
+mostincidentsPromise.then(succFCN3,failFCN3);
+
+
+
+//graph 4 starts here
+
+
+var initGraph4= function (incident)
+{
+    var screen= {width: 700, height: 400}
+    
+    var margins= {left:70, right:5, top:20, bottom: 20}
+    
+    var graph= 
         {
-            width:screen.width-margins.left-margins.right,
-            height:screen.height - margins.top-margins.bottom
+            width:screen.width-margins. left-margins.right,
+            height:screen.height/1.2 - margins.top-margins.bottom
         }
-
-joinData(mapData,stateData)
-    d3.select("svg")
-.attr("width", screen.width)
-.attr("height", screen.height)
-
-var target= d3.select("svg")
-.append("g")
-.attr("id", "#graph")
-.attr("transform","translate("+margins.left+ ","+ margins.top+")");
-
-var color1= d3.scaleQuantize()
-    .range(["rgb(255,255,255)","rgb(230,247,255)","rgb(179,231,255)", "rgb(128,215,255)", "rgb(77,198,255)","rgb(26,182,255)","rgb(0,157,230)", "rgb(0,122,179)", "rgb(0,87,128)","rgb(0,52,77)", "rgb(0,0,0)"])
-    .domain([.0402,.4443]);
     
- var color2= d3.scaleQuantize()
-   .range(['#ffb6c1', '#db6fbb', '#b300b3'])
-    .domain([.033, .268]);  
+    console.log(graph)
     
- var color3= d3.scaleQuantize()
-    .range(["rgb(0,0,0)"])
-    .domain([.033,.268]);
-   
+    d3.select("#graph4")
+        .attr("width", screen.width)
+        .attr("height",screen.height)
+            
+  
+    var target = d3.select("#graph4")
+                .append ("g")
+                .attr("transform", "translate (" + margins.left + ", "+ margins.top +")");
     
-var projection= d3.geoAlbersUsa()
-
-
-var pathGen= d3.geoPath()
-.projection(projection)
-
-        drawMap(mapData, target, pathGen, projection, "petownership_percentage","dogownership_percentage","catownership_percentage", color1, color2 );
+    var xScale= d3.scaleBand()
+        .domain(["Massachusetts","Missouri","Maine","West Virginia","Illinois"])
+        .range([0, graph.width])
+        .paddingInner(.25)
     
-    drawMap(mapData, target, pathGen, projection, "petownership_percentage","dogownership_percentage","catownership_percentage", color1, color2);
+    var yScale= d3.scaleLinear()
+        .domain([0,50])
+        .range([graph.height,0])
     
-      drawMap(mapData, target, pathGen, projection,"petownership_percentage","dogownership_percentage","catownership_percentage", color2, color3);
+    
+    drawAxis4(graph,margins,xScale,yScale);
+    var g0 = target.append("g");
+    drawBars4(incident,g0,graph,xScale,yScale);
+    drawLabels4(graph,margins,target);
 
-    drawMapbutton(mapData,target,pathGen,projection,color1,color2,color3)
 }
 
 
-
-
-
-//--------buttons----------
-		var drawMapbutton = function (mapData,target,pathGen,projection,color1,color2,color3)
-		{
-			d3.select("#banner1")
-			.on("click", function()
-			   {
-                console.log("hello")
-				d3.selectAll("path")
-				.remove()
-			drawMap(mapData, target, pathGen, projection, "petownership_percentage","dogownership_percentage","catownership_percentage", color1, color2);
-				
-			})
+var drawBars4= function(incident,target,graphDim,xScale,yScale)
+{
+    target.selectAll("rect")
+        .data(incident)
+        .enter()
+        .append("rect")
+        .attr("x", function (state)
+{
+                return xScale(state.state);
+})
+        .attr("y", function (state)
+{ 
         
-		{
-			d3.select("#banner2")
-			.on("click", function()
-			   {
-                console.log("hi")
-                d3.selectAll("path")
-				.remove()
-                
-			drawMap(mapData, target, pathGen, projection, "petownership_percentage","dogownership_percentage","catownership_percentage", color1,color2);
-				
-			})
-            d3.select("#banner3")
-			.on("click", function()
-			   {
-                console.log("howdy")
-                d3.selectAll("path")
-				.remove()
-                
-			drawMap(mapData, target, pathGen, projection, "petownership_percentage","dogownership_percentage","catownership_percentage", color2, color3);
-				
-			})
-        }}
-				
-var successFCN = function(states)
-{
-    console.log("states", states);
-    initGraph(states[0], states[1]);
-   
+                  return yScale (state.incident_number);
+})
     
-    
-}
-var failureFCN= function(error)
+        .attr("width",xScale.bandwidth)
+        .attr("height", function(state)
+{ 
+               return graphDim.height-yScale(state.incident_number)
+})
+        .attr("fill", "black") .on("mouseenter", function(incident)
 {
-    console.log("error", error);
+                var xPos= d3.event.pageX;
+                var yPos= d3.event.pageY;
+            
+        d3.select("#tooltip")
+            .classed("hidden", false)
+            .style("top",yPos+"px")
+            .style("left",xPos+"px")
+            .text(incident.incident_number) 
+})
 }
-var statePromise= d3.csv("stateownership.csv")
-var geoPromise= d3.json("USstates.json")
-var promises= [statePromise, geoPromise];
-Promise.all(promises)
-.then(successFCN, failureFCN);
+   /*  .selectAll(".bar")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.letter); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.frequency); })
+      .attr("height", function(d) { return height - y(d.frequency); })
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide)
+      */
+
+        
+
+var drawAxis4 = function(graph,margins,xScale,yScale)
+{
+   var xAxis= d3.axisBottom(xScale);
+   var yAxis= d3.axisLeft(yScale);
+    
+    var axes= d3.select("#graph4")
+        .append("g")
+        
+    axes.append("g")
+        .attr("transform", "translate("+margins.left+","+(margins.top+graph.height)+")") 
+        
+        .call(xAxis)
+        
+ 
+    axes.append("g")
+        .attr("transform", "translate("+margins.left+","+(margins.top)+")") 
+       .call(yAxis)
+
+}
+
+var drawLabels4 = function(graph,margins)
+{
+        var labels = d3.select("#graph4")
+        .append("g")
+        .classed("labels",true)
+        
+    labels.append("text")
+        .text("States with the fewest Animal Cruelty Incidents Per Year")
+        .classed("title",true)
+        .attr("text-anchor","middle")
+        .attr("x",margins.left+(graph.width/2))
+        .attr("y",margins.top)
+     
+    labels.append("g")
+        .attr("transform","translate(20,"+ 
+              (margins.top+(graph.height/2))+")")
+        .append("text")
+        .text("# of Incidents")
+        .classed("label",true)
+        .attr("text-anchor","middle")
+        .attr("transform","rotate(270)")
+}
+
+var succFCN4 = function(incident)
+{
+    initGraph4(incident);
+}
+
+
+var failFCN4 = function(error)
+{
+    console.log("error",error)
+}
+
+var incidentPromise= d3.csv("../csv/incident.csv")
+
+incidentPromise.then(succFCN4,failFCN4);
